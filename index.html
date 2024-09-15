@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Code Runner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .console {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            font-family: monospace;
+            height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h2>JavaScript Code Runner</h2>
+
+<textarea id="codeArea" placeholder="Write your JavaScript code here..."></textarea>
+<br>
+<button onclick="runCode()">Run</button>
+
+<h3>Console Output:</h3>
+<div class="console" id="consoleOutput"></div>
+
+<script>
+    function runCode() {
+        const code = document.getElementById("codeArea").value;
+        const consoleOutput = document.getElementById("consoleOutput");
+
+        // Clear the console
+        consoleOutput.innerHTML = '';
+
+        try {
+            // Capture console.log outputs
+            const originalConsoleLog = console.log;
+            console.log = function(message) {
+                consoleOutput.innerHTML += message + '<br>';
+                originalConsoleLog.apply(console, arguments);
+            };
+
+            // Run the user's code
+            new Function(code)();
+        } catch (error) {
+            consoleOutput.innerHTML = 'Error: ' + error.message;
+        } finally {
+            // Restore original console.log
+            console.log = originalConsoleLog;
+        }
+    }
+</script>
+
+</body>
+</html>
