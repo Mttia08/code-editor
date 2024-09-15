@@ -21,6 +21,7 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            margin-right: 10px;
         }
         .console {
             margin-top: 20px;
@@ -40,12 +41,16 @@
 <textarea id="codeArea" placeholder="Write your JavaScript code here..."></textarea>
 <br>
 <button onclick="runCode()">Run</button>
+<button onclick="saveFile()">Save</button>
+<button onclick="loadFile()">Load</button>
+<input type="file" id="fileInput" style="display:none" accept=".js, .txt">
 
 <h3>Console Output:</h3>
 <div class="console" id="consoleOutput"></div>
 
 <script>
     const textarea = document.getElementById("codeArea");
+    const fileInput = document.getElementById("fileInput");
 
     textarea.addEventListener('input', function() {
         const code = textarea.value;
@@ -82,6 +87,30 @@
             console.log = originalConsoleLog;
         }
     }
+
+    function saveFile() {
+        const code = document.getElementById("codeArea").value;
+        const blob = new Blob([code], { type: "text/javascript" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "code.js";
+        link.click();
+    }
+
+    function loadFile() {
+        fileInput.click(); // Trigger the file dialog
+    }
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("codeArea").value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    });
 </script>
 
 </body>
