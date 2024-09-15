@@ -45,6 +45,19 @@
 <div class="console" id="consoleOutput"></div>
 
 <script>
+    const textarea = document.getElementById("codeArea");
+
+    textarea.addEventListener('input', function() {
+        const code = textarea.value;
+        // Replace fancy quotes with standard quotes
+        const correctedCode = code
+            .replace(/[“„]/g, '"')  // Replace fancy double quotes
+            .replace(/[‘’]/g, "'"); // Replace fancy single quotes
+        if (correctedCode !== code) {
+            textarea.value = correctedCode;
+        }
+    });
+    
     function runCode() {
         const code = document.getElementById("codeArea").value;
         const consoleOutput = document.getElementById("consoleOutput");
